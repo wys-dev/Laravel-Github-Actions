@@ -1,0 +1,39 @@
+name: Laravel CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'  # Set the PHP version
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Set up .env file
+        run: cp .env.example .env
+
+      - name: Generate application key
+        run: php artisan key:generate
+
+      - name: Run migrations
+        run: php artisan migrate --env=testing
+
+      - name: Run tests
+        run: php artisan test
