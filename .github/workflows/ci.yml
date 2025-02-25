@@ -38,6 +38,11 @@ jobs:
       - name: Build Vite assets
         run: npm run build
 
+      - name: Load environment variables from .env file
+        run: |
+          cp .env.example .env
+          export $(cat .env | grep -v ^# | xargs)
+
       - name: Generate application key
         run: php artisan key:generate
 
