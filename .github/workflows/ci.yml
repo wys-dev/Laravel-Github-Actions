@@ -38,8 +38,8 @@ jobs:
       - name: Build Vite assets
         run: npm run build
 
-      - name: Set up environment
-        run: echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
+      - name: Generate application key
+        run: php artisan key:generate
 
       - name: Run tests
         run: |
